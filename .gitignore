@@ -3,3 +3,11 @@ venv*
 
 # Exclude config files
 config.json
+
+# Eggs
+*.egg-info/
+
+# Python files
+*.pyc
+*.pyd
+*.pyo
