@@ -68,7 +68,7 @@
                     zoom: 8,
                 });
 
-                getFile('./spawns.json', true, function(response) {
+                getFile('../output/spawns.json', true, function(response) {
                     console.log('got spawns');
                     var data = JSON.parse(response);
                     console.log(data.length + ' spawn points loaded');
@@ -93,7 +93,7 @@
                 gymsLayer = new google.maps.Data();
                 stopsLayer = new google.maps.Data();
 
-                gymsLayer.loadGeoJson('./geo_gyms.json');
+                gymsLayer.loadGeoJson('../output/geo_gyms.json');
                 gymsLayer.setStyle(function(feature) {
                     return {icon: gym};
                 });
@@ -105,7 +105,7 @@
                     infowindow.open(map);
                 });
                 
-                stopsLayer.loadGeoJson('./geo_stops.json');
+                stopsLayer.loadGeoJson('../output/geo_stops.json');
                 stopsLayer.setStyle(function(feature) {
                     return {icon: stop};
                 });

@@ -42,7 +42,7 @@
                     zoom: 8,
                 });
                 
-                getFile('./config.json', true, function(response) {
+                getFile('../config.json', true, function(response) {
                     console.log('got work');
                     var data = JSON.parse(response);
                     var D = data.work;

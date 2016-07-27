@@ -50,7 +50,7 @@
                     zoom: 8,
                 });
                 
-                getFile('./spawns.json', true, function(response) {
+                getFile('../output/spawns.json', true, function(response) {
                     console.log('got spawns');
                     var data = JSON.parse(response);
                     for (var i = 0; i < data.length; i++) {
