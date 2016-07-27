@@ -14,7 +14,7 @@ setup(
     name='spawnScan',
     author='TBTerra',
     description='A simple and fast spawnPoint finder for pokemon go',
-    version='1.1.0',
+    version='0.1.1',
     url='https://github.com/TBTerra/spawnScan',
     packages=find_packages(),
     install_requires=reqs
