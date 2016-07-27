@@ -1,2 +1,5 @@
 # Virtual environments
 venv*
+
+# Exclude config files
+config.json
