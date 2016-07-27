@@ -54,12 +54,12 @@
 			var grey;
 
 			function initMap() {
-				green = {url: "./static/green.png",size: new google.maps.Size(20, 20),anchor: new google.maps.Point(10, 10)};
-				blue = {url: "./static/blue.png",size: new google.maps.Size(20, 20),anchor: new google.maps.Point(10, 10)};
-				orange = {url: "./static/orange.png",size: new google.maps.Size(20, 20),anchor: new google.maps.Point(10, 10)};
-				grey = {url: "./static/grey.png",size: new google.maps.Size(20, 20),anchor: new google.maps.Point(10, 10)};
-				gym = {url: "./static/gym.png",size: new google.maps.Size(30, 30),anchor: new google.maps.Point(15,30)};
-				stop = {url: "./static/pokestop.png",size: new google.maps.Size(30, 30),anchor: new google.maps.Point(15, 30)};
+				green = {url: "../static/green.png",size: new google.maps.Size(20, 20),anchor: new google.maps.Point(10, 10)};
+				blue = {url: "../static/blue.png",size: new google.maps.Size(20, 20),anchor: new google.maps.Point(10, 10)};
+				orange = {url: "../static/orange.png",size: new google.maps.Size(20, 20),anchor: new google.maps.Point(10, 10)};
+				grey = {url: "../static/grey.png",size: new google.maps.Size(20, 20),anchor: new google.maps.Point(10, 10)};
+				gym = {url: "../static/gym.png",size: new google.maps.Size(30, 30),anchor: new google.maps.Point(15,30)};
+				stop = {url: "../static/pokestop.png",size: new google.maps.Size(30, 30),anchor: new google.maps.Point(15, 30)};
 				infowindow = new google.maps.InfoWindow();
 				
 				var mapDiv = document.getElementById('map');
@@ -120,29 +120,29 @@
 				var legenditems = {
 					gyms: {
 						name: 'Gyms',
-						icon: './static/gym.png',
+						icon: '../static/gym.png',
 						layer: 'gymsLayer'
 					},
 					pokestops: {
 						name: 'Pokestops',
-						icon: './static/pokestop.png',
+						icon: '../static/pokestop.png',
 						layer: 'stopsLayer'
 					},
 					active: {
 						name: 'Spawned recently',
-						icon: './static/green.png'
+						icon: '../static/green.png'
 					},
 					despawning: {
 						name: 'Despawning in <5 min',
-						icon: './static/orange.png'
+						icon: '../static/orange.png'
 					},
 					spawning: {
 						name: 'Spawning in <5 min',
-						icon: './static/blue.png'
+						icon: '../static/blue.png'
 					},
 					inactive: {
 						name: 'Inactive',
-						icon: './static/grey.png'
+						icon: '../static/grey.png'
 					}
 
 				};
