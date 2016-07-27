@@ -11,10 +11,18 @@ Features
 - High speed scans while still maintaining maximum accuracy (many scan patterns where tested and this is using the fastest of the ones with over 98% accuracy)
 - Multi thread support, allowing for faster, and thus forth bigger scans (up to 16 workers, after this point there is minimal increase in speed and your just putting more load on the servers)
 
-Usage
-=====
+Installation & Setup
+====================
+Get a copy of the repository either by downloading or cloning the repo. Navigate to the top level directory (containing the requirements.txt file) and run::
+
+    pip install -r requirements.txt
+
+This will install the latest release version of the PGoApi from Github, and will perform and editable local install of the main spawnscan package. The local install of the package will create an entry point called 'spawnscan' which is used to run the program from the command line.
+
 Everything is set using the config.json file, in this you put account details, and rectangular regions to scan. A config.json.example file is provided. Copy this to config.json and populated it with your login information and the desired region.
 
+Usage
+=====
 There are two runnable scripts, check.py, and spawn.py
 - check.py checks the config file is valid json, and estimates how long the scan will take to finish one pass
 - spawn.py is the main script that does all the heavy work, finding the spawns, it will refuse to run on a workload that is predicted to take more than 10minutes, as it needs to be able to do 6 passes in an hour
