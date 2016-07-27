@@ -11,7 +11,6 @@ import threading
 from pgoapi import PGoApi
 from pgoapi.utilities import f2i
 
-from google.protobuf.internal import encoder
 from s2sphere import CellId, LatLng
 
 
@@ -50,13 +49,6 @@ def get_cellid(lat, lng, level=15):
         next = next.next()
         prev = prev.prev()
     return sorted(walk)
-    # return ''.join(map(encode, sorted(walk)))
-
-
-def encode(cellid):
-    output = []
-    encoder._VarintEncoder()(output.append, cellid)
-    return ''.join(output)
 
 
 def doScan(sLat, sLng, api):
