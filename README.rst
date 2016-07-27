@@ -13,7 +13,8 @@ Features
 
 Usage
 =====
-Everything is set using the config.json file, in this you put account details, and rectangular regions to scan
+Everything is set using the config.json file, in this you put account details, and rectangular regions to scan. A config.json.example file is provided. Copy this to config.json and populated it with your login information and the desired region.
+
 There are two runnable scripts, check.py, and spawn.py
 - check.py checks the config file is valid json, and estimates how long the scan will take to finish one pass
 - spawn.py is the main script that does all the heavy work, finding the spawns, it will refuse to run on a workload that is predicted to take more than 10minutes, as it needs to be able to do 6 passes in an hour
