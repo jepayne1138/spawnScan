@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-import spawnscan.spawn as spawn
+import spawnscan.multiscan as multiscan
 import spawnscan.check as check
 
 
@@ -32,4 +32,4 @@ def main():
         check.calcwork(radius=args.radius, error=args.error)
     else:
         # Handle the console input
-        spawn.main()
+        multiscan.main()

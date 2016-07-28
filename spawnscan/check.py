@@ -18,6 +18,8 @@ def calcwork(radius=100, error=0.05):
         totalwork += len(
             stepcalc.hex_grid(*rect, radius=radius, error=error)
         )
+
+    # Display the estimated time
     print(
         (
             'Total of {} steps covering {} km^2, approx {} seconds for scan'
