@@ -2,6 +2,8 @@ import time
 import json
 import multiprocessing
 import traceback
+import Queue
+from ctypes import c_int
 from s2sphere import CellId, LatLng
 from pgoapi import PGoApi
 import spawnscan.stepcalculator as stepcalc
@@ -9,6 +11,7 @@ import spawnscan.stepcalculator as stepcalc
 
 TIMESTAMP = 0
 SPAWN_DURATION = 900000  # In milliseconds
+THROTTLE = 0.18
 
 
 def get_cellid(lat, lng, level=15):
@@ -53,47 +56,87 @@ def scanner(position):
                     'pid': wild['pokemon_data']['pokemon_id'],
                 })
 
-    except Exception:  # TODO catch specific errors
-        traceback.print_exc()
-        # print('Error getting map data for {}, {}'.format(lat, lng))
+        # Cleanup and throttle on success
+        with scanner.counter_lock:
+            scanner.counter.value += 1
+        time.sleep(THROTTLE)
+    except Exception:
+        scanner.queue.put(position)
+        if response_dict['status_code'] != 1:
+            print('[{}][Invalid status_code: {}] position: {}'.format(multiprocessing.current_process().name, response_dict['status_code'], position))
+        else:
+            print('[{}][General Exception] position: {}'.format(multiprocessing.current_process().name, position))
+            traceback.print_exc()
+            print(response_dict)
+
+    # In any case, return the empty list or hopefully list of found pokemon
     return pokemon
 
 
-def scanner_init(auth, user, password):
+def scanner_init(user_queue, queue, counter, counter_lock, retry=0.5):
+    scanner.queue = queue
+    scanner.counter = counter
+    scanner.counter_lock = counter_lock
     api = PGoApi()
-    while not api.login(auth, user, password):
-        print('Failure to log in. Retrying in 5 seconds')
-        time.sleep(5)
+    user = user_queue.get()
+    api_logged_in = False
+    while not api_logged_in:
+        print('Attempting to log in user: {}'.format(user[1]))
+        api_logged_in = api.login(*user)
+        if not api_logged_in:
+            print('Failure to log in. Retrying in {} seconds'.format(retry))
+            time.sleep(retry)
     scanner.api = api
 
 
-def pool_scan(auth, username, password, position_list, processes=None):
+def iterqueue(items, queue, counter):
+    item_count = len(items)
+    for item in items:
+        queue.put(item)
+    while counter.value != item_count:
+        try:
+            yield queue.get(False)
+        except Queue.Empty:
+            pass
+
+
+def pool_scan(users, position_list):
     # Create the Pool
-    init_args = (auth, username, password)
-    pool = multiprocessing.Pool(initializer=scanner_init, initargs=init_args)
+    queue = multiprocessing.Queue()
+    user_queue = multiprocessing.Queue()
+    for user in users:
+        user_queue.put(
+            (user['auth_service'], user['username'], user['password'])
+        )
+    counter = multiprocessing.Value(c_int)
+    counter_lock = multiprocessing.Lock()
+    init_args = (user_queue, queue, counter, counter_lock)
+    pool = multiprocessing.Pool(
+        processes=len(users),
+        initializer=scanner_init,
+        initargs=init_args
+    )
 
     spawns = {}
-    for scanned in pool.imap_unordered(scanner, position_list):
+    for scanned in pool.imap_unordered(scanner, iterqueue(position_list, queue, counter)):
         for found in scanned:
             spawns[found['sid']] = found
     return spawns
 
 
 def main():
-    start_time = time.time()
 
     # Create config
-    with open('../config.json') as config_file:
+    with open('./config.json') as config_file:
         config = json.load(config_file)
 
     scan_positions = []
     for rect in config['work']:
         scan_positions += stepcalc.hex_grid(*rect)
 
+    start_time = time.time()  # Right now only want to record actual scanning time (not setup)
     spawns = pool_scan(
-        config['auth_service'],
-        config['users'][0]['username'],
-        config['users'][0]['password'],
+        config['users'],
         scan_positions
     )
 

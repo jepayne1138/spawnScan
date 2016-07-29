@@ -29,7 +29,12 @@ def main():
     args = parse_arguments(sys.argv[1:])
 
     if args.check:
-        check.calcwork(radius=args.radius, error=args.error)
+        print(
+            check.estimate_string(
+                radius=args.radius,
+                error=args.error,
+            )
+        )
     else:
         # Handle the console input
         multiscan.main()
